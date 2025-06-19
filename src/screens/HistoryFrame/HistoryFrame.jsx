@@ -15,44 +15,42 @@ import { useAuth } from "../../contexts/AuthContext";
 import { MenuIcon, XIcon } from "lucide-react";
 
 export const HistoryFrame = () => {
-  const [activeView, setActiveView] = useState('dashboard');
+  const [activeView, setActiveView] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { user } = useAuth();
 
   const renderMainContent = () => {
     switch (activeView) {
-      case 'dashboard':
+      case "dashboard":
         return <DashboardView onViewChange={setActiveView} />;
-      
+
       // Admin Views
-      case 'guards':
+      case "guards":
         return <GuardManagement />;
-      case 'residents':
+      case "residents":
         return <ResidentManagement />;
-      case 'history':
+      case "history":
         return (
-          <Card className="bg-[#393e46] rounded-[7px] border-none">
-            <CardContent className="p-3.5">
-              <div className="border border-solid border-[#948979] p-3">
-                <VisitorHistorySection />
-                <VisitorTableSection userRole={user?.role} />
-              </div>
+          <Card className="glass-effect rounded-2xl shadow-soft border-0">
+            <CardContent className="p-6">
+              <VisitorHistorySection />
+              <VisitorTableSection userRole={user?.role} />
             </CardContent>
           </Card>
         );
-      
+
       // Guard Views
-      case 'scan-code':
+      case "scan-code":
         return <ScanCodeView />;
-      case 'verify-otp':
+      case "verify-otp":
         return <VerifyOTPView />;
-      
+
       // Resident Views
-      case 'invite-visitor':
+      case "invite-visitor":
         return <InviteVisitorView />;
-      case 'my-invites':
+      case "my-invites":
         return <MyInvitesView />;
-      
+
       default:
         return <DashboardView onViewChange={setActiveView} />;
     }
@@ -64,50 +62,57 @@ export const HistoryFrame = () => {
   };
 
   return (
-    <div className="bg-[#222831] flex flex-col lg:flex-row justify-center w-full min-h-screen">
-      <div className="bg-[#222831] rounded-[20px] overflow-x-hidden w-full max-w-[1487px] relative p-2 lg:p-4">
+    <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-white to-primary-50/30">
+      <div className="max-w-7xl mx-auto p-4 lg:p-6">
         {/* Mobile Header with Menu Button */}
-        <div className="lg:hidden flex items-center justify-between mb-4 p-4 bg-[#393e46] rounded-lg">
-          <h1 className="text-lg font-bold text-[#dfd0b8] font-['Kumar_One',Helvetica]">
-            VMS
-          </h1>
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="text-[#e8eaed] p-2"
-          >
-            {sidebarOpen ? <XIcon className="w-6 h-6" /> : <MenuIcon className="w-6 h-6" />}
-          </button>
+        <div className="lg:hidden glass-effect rounded-2xl p-4 mb-6 shadow-soft border-0">
+          <div className="flex items-center justify-between">
+            <h1 className="text-xl font-bold font-display gradient-text">
+              MiMo NG
+            </h1>
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="p-2 rounded-xl bg-white/50 hover:bg-white/80 transition-colors"
+            >
+              {sidebarOpen ? (
+                <XIcon className="w-6 h-6" />
+              ) : (
+                <MenuIcon className="w-6 h-6" />
+              )}
+            </button>
+          </div>
         </div>
 
         {/* Desktop Header */}
         <div className="hidden lg:block">
           <Header />
         </div>
-        
-        <div className="flex relative">
+
+        <div className="flex gap-6 relative">
           {/* Mobile Sidebar Overlay */}
           {sidebarOpen && (
-            <div 
-              className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
+            <div
+              className="lg:hidden fixed inset-0 bg-black/20 backdrop-blur-sm z-40 animate-fade-in"
               onClick={() => setSidebarOpen(false)}
             />
           )}
 
           {/* Sidebar */}
-          <div className={`
-            lg:relative lg:translate-x-0 lg:block
-            ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-            fixed lg:static top-0 left-0 h-full lg:h-auto
+          <div
+            className={`
+            lg:relative lg:translate-x-0 lg:block lg:w-64
+            ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
+            fixed lg:static top-0 left-0 h-full lg:h-auto w-64
             transition-transform duration-300 ease-in-out
-            z-50 lg:z-auto
-            lg:mr-[47px]
-          `}>
+            z-50 lg:z-auto p-4 lg:p-0
+          `}
+          >
             <Sidebar activeView={activeView} onViewChange={handleViewChange} />
           </div>
-          
+
           {/* Main Content */}
-          <main className="flex-1 min-w-0 px-2 lg:px-0">
-            {renderMainContent()}
+          <main className="flex-1 min-w-0">
+            <div className="animate-slide-up">{renderMainContent()}</div>
           </main>
         </div>
       </div>
